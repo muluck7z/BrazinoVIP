@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRAZINO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-hover: #059669;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f1f5f9;
+            --text-sec: #94a3b8;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --success: #10b981;
+            --border: #334155;
+            --nav-bg: #064e3b;
+            --warning: #f59e0b;
+            --vpn-active: #22c55e;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            width: 420px;
+            min-height: 560px;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1a1f35 100%);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Header ── */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, #065f46 100%);
+            color: white;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-logo {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1.5px solid rgba(255,255,255,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 17px;
+            letter-spacing: 1.5px;
+            font-weight: 800;
+        }
+
+        .header-badge {
+            font-size: 10px;
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Nav ── */
+        .nav-menu {
+            display: flex;
+            gap: 4px;
+            background: rgba(0,0,0,0.35);
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(16,185,129,0.15);
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            flex-shrink: 0;
+        }
+
+        .nav-menu::-webkit-scrollbar { height: 3px; }
+        .nav-menu::-webkit-scrollbar-thumb { background: rgba(16,185,129,0.3); border-radius: 2px; }
+
+        .nav-btn {
+            padding: 7px 12px;
+            border: 1px solid rgba(16,185,129,0.25);
+            background: rgba(16,185,129,0.07);
+            color: var(--text-sec);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(16,185,129,0.18);
+            border-color: rgba(16,185,129,0.45);
+            color: var(--text-main);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, #065f46 100%);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 3px 10px rgba(16,185,129,0.3);
+        }
+
+        /* ── Container ── */
+        .container {
+            flex: 1;
+            padding: 16px 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .content-wrapper {
+            width: 100%;
+            max-width: 392px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* ── Cards ── */
+        .card {
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+        }
+
+        .card + .card { margin-top: 12px; }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            gap: 10px;
+            flex-direction: column;
+        }
+
+        .card-header-icon {
+            width: 46px;
+            height: 46px;
+            background: linear-gradient(135deg, rgba(16,185,129,0.18), rgba(6,95,70,0.18));
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 22px;
+            border: 1px solid rgba(16,185,129,0.25);
+        }
+
+        .card-header-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin: 0;
+        }
+
+        .card-subtitle {
+            font-size: 12px;
+            color: var(--text-sec);
+            text-align: center;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        /* ── Forms ── */
+        .form-group { margin-bottom: 13px; width: 100%; }
+
+        label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-sec);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="number"],
+        input[type="email"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 11px 13px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: 13px;
+            transition: all 0.25s;
+            font-family: inherit;
+            background: rgba(255,255,255,0.04);
+            color: var(--text-main);
+        }
+
+        textarea { resize: vertical; min-height: 72px; }
+        select option { background: #1e293b; }
+        input::placeholder, textarea::placeholder { color: rgba(148,163,184,0.5); }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.15);
+            background: rgba(16,185,129,0.06);
+        }
+
+        /* ── Buttons ── */
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            font-family: inherit;
+        }
+
+        .btn-primary { background: linear-gradient(135deg, var(--primary) 0%, #065f46 100%); color: white; }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--primary-hover) 0%, #064e3b 100%); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,0.35); }
+        .btn-primary:active { transform: translateY(0); }
+
+        .btn-secondary { background: var(--nav-bg); color: #d1fae5; }
+        .btn-secondary:hover { background: #065f46; }
+
+        .btn-danger { background: linear-gradient(135deg, var(--danger) 0%, #991b1b 100%); color: white; }
+        .btn-danger:hover { background: linear-gradient(135deg, var(--danger-hover) 0%, #7f1d1d 100%); transform: translateY(-1px); }
+
+        .btn-success { background: linear-gradient(135deg, var(--success) 0%, #047857 100%); color: white; }
+        .btn-success:hover { transform: translateY(-1px); }
+
+        .btn-ghost {
+            background: rgba(255,255,255,0.06);
+            color: var(--text-sec);
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            font-size: 12px;
+            width: auto;
+        }
+        .btn-ghost:hover { background: rgba(255,255,255,0.1); color: var(--text-main); }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            border-radius: 8px;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .btn-row { display: flex; gap: 8px; margin-top: 6px; }
+        .btn-row button { flex: 1; }
+
+        /* ── Alerts ── */
+        .alert {
+            width: 100%;
+            border-radius: 10px;
+            padding: 11px 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 12px;
+            border: 1px solid transparent;
+            animation: slideUp 0.25s ease-out;
+            margin-top: 12px;
+        }
+        .alert-success { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.35); color: #10b981; }
+        .alert-error   { background: rgba(239,68,68,0.12);  border-color: rgba(239,68,68,0.35);  color: #ef4444; }
+        .alert-info    { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.35); color: #34d399; }
+        .alert-main    { display: flex; align-items: center; gap: 7px; font-weight: 600; }
+
+        @keyframes slideUp {
+            from { transform: translateY(8px); opacity: 0; }
+            to   { transform: translateY(0);   opacity: 1; }
+        }
+
+        /* ── Profile ── */
+        .profile-layout { display: flex; flex-direction: column; gap: 16px; }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            background: rgba(255,255,255,0.03);
+            padding: 13px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .profile-avatar { width: 54px; height: 54px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
+        .profile-info h3 { margin: 0; font-size: 15px; color: var(--text-main); }
+        .profile-info p  { margin: 3px 0 0; font-size: 11px; color: var(--text-sec); }
+
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .stat-card { background: rgba(255,255,255,0.03); padding: 11px; border-radius: 9px; border: 1px solid var(--border); text-align: center; }
+        .stat-value { display: block; font-size: 15px; font-weight: 700; color: var(--primary); }
+        .stat-label { font-size: 10px; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.4px; }
+
+        /* ── Auth Tab ── */
+        .section-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-sec);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .code-section { text-align: center; background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.25); }
+
+        .code-display {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 6px;
+            margin: 8px 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+        }
+
+        .timer-container { height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; margin: 10px 0 8px; overflow: hidden; }
+        #timer-bar { height: 100%; background: var(--primary); width: 100%; transition: width 1s linear; }
+        #timer-text { font-size: 11px; color: var(--text-sec); }
+
+        .secret-display-box {
+            font-family: monospace;
+            font-size: 10px;
+            background: rgba(255,255,255,0.04);
+            padding: 7px;
+            border-radius: 7px;
+            border: 1px dashed rgba(16,185,129,0.4);
+            color: var(--text-sec);
+            cursor: pointer;
+            word-break: break-all;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        /* ── Temp Email ── */
+        .email-addr {
+            font-family: monospace;
+            font-size: 12px;
+            color: var(--text-sec);
+            padding: 9px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 9px;
+            border: 1px solid var(--border);
+            margin-bottom: 11px;
+            word-break: break-all;
+            text-align: center;
+        }
+
+        #inbox-status { font-size: 11px; color: var(--text-sec); margin-top: 9px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .status-dot { width: 7px; height: 7px; background: #555; border-radius: 50%; display: inline-block; }
+        .status-active .status-dot { background: var(--vpn-active); box-shadow: 0 0 5px var(--vpn-active); animation: pulse 1.5s infinite; }
+
+        .email-notification { background: rgba(16,185,129,0.08); border: 1.5px solid rgba(16,185,129,0.3); border-radius: 10px; padding: 11px; margin-top: 12px; display: none; animation: slideUp 0.25s ease-out; }
+        .email-notification.active { display: block; }
+        .notification-label { font-size: 10px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
+        .notification-content { font-size: 12px; font-weight: 600; color: var(--text-main); line-height: 1.4; }
+
+        @keyframes pulse { 0% { opacity:1; } 50% { opacity:0.4; } 100% { opacity:1; } }
+
+        /* ── VPN ── */
+        .ip-display { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 11px 13px; display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .ip-label { font-size: 11px; color: var(--text-sec); font-weight: 500; flex-shrink: 0; }
+        .ip-value { font-size: 13px; font-weight: 600; color: var(--primary); font-family: 'Fira Code', monospace; flex: 1; }
+
+        .refresh-btn { background: none; border: none; color: var(--text-sec); cursor: pointer; padding: 4px; border-radius: 4px; display: flex; align-items: center; transition: color 0.2s; flex-shrink: 0; width: auto; }
+        .refresh-btn:hover { color: var(--primary); }
+        .refresh-btn.spinning svg { animation: spin 0.8s linear infinite; }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .vpn-toggle-row { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 12px; }
+        .toggle-label { font-weight: 700; color: var(--text-main); font-size: 13px; }
+
+        .vpn-status-badge { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--text-sec); padding: 3px 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 20px; transition: all 0.3s; }
+        .vpn-status-badge.active { color: var(--vpn-active); background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.3); }
+        .vpn-status-badge.active .status-dot { background: var(--vpn-active); box-shadow: 0 0 5px var(--vpn-active); }
+
+        .toggle { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .toggle input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.1); border-radius: 24px; transition: 0.3s; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background: #666; border-radius: 50%; transition: 0.3s; }
+        input:checked + .slider { background: var(--primary); }
+        input:checked + .slider:before { transform: translateX(20px); background: #fff; }
+
+        .vpn-tabs { display: flex; gap: 4px; margin-bottom: 10px; }
+        .vpn-tab { flex: 1; padding: 7px; border: none; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; background: rgba(255,255,255,0.06); color: var(--text-sec); transition: all 0.2s; }
+        .vpn-tab.active { background: var(--primary); color: white; }
+        .vpn-tab-content { display: none; }
+        .vpn-tab-content.active { display: block; }
+
+        .preset-list { display: flex; flex-direction: column; gap: 6px; }
+        .preset-item { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; transition: border-color 0.2s; }
+        .preset-item.selected { border-color: var(--primary); background: rgba(16,185,129,0.08); }
+        .preset-info { display: flex; align-items: center; gap: 9px; }
+        .preset-flag { font-size: 17px; }
+        .preset-name { font-weight: 600; color: var(--text-main); font-size: 12px; }
+        .preset-addr { font-family: monospace; font-size: 10px; color: var(--text-sec); margin-top: 2px; }
+
+        .select-btn { background: rgba(255,255,255,0.08); border: none; color: var(--text-sec); font-size: 11px; font-weight: 600; padding: 5px 11px; border-radius: 5px; cursor: pointer; transition: all 0.2s; white-space: nowrap; width: auto; }
+        .select-btn:hover, .select-btn.active { background: var(--primary); color: #fff; }
+
+        .vpn-form-row { display: flex; gap: 8px; }
+        .vpn-form-row .form-group { flex: 1; }
+        .vpn-footer { text-align: center; margin-top: 8px; }
+        .vpn-footer a { color: var(--text-sec); font-size: 11px; text-decoration: none; }
+        .vpn-footer a:hover { color: var(--primary); }
+
+        /* ── VPN Proxy List ── */
+        .vpn-empty-state {
+            text-align: center;
+            padding: 24px 16px;
+            color: var(--text-sec);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .vpn-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 24px;
+            color: var(--text-sec);
+            font-size: 12px;
+        }
+
+        .vpn-spinner {
+            width: 18px; height: 18px;
+            border: 2px solid rgba(16,185,129,0.2);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .vpn-proxy-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 9px 12px;
+            margin-bottom: 6px;
+            transition: border-color 0.2s;
+        }
+
+        .vpn-proxy-item.connected {
+            border-color: var(--primary);
+            background: rgba(16,185,129,0.08);
+        }
+
+        .vpn-proxy-item.connecting {
+            border-color: var(--warning);
+            background: rgba(245,158,11,0.06);
+        }
+
+        .vpn-proxy-item.failed {
+            border-color: var(--danger);
+            background: rgba(239,68,68,0.06);
+            opacity: 0.7;
+        }
+
+        .vpn-proxy-info { display: flex; align-items: center; gap: 9px; flex: 1; min-width: 0; }
+        .vpn-proxy-flag { font-size: 18px; flex-shrink: 0; }
+        .vpn-proxy-details { min-width: 0; }
+        .vpn-proxy-name { font-size: 12px; font-weight: 700; color: var(--text-main); }
+        .vpn-proxy-addr { font-family: monospace; font-size: 10px; color: var(--text-sec); margin-top: 2px; }
+
+        .vpn-proto-badge {
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            flex-shrink: 0;
+            margin-left: 4px;
+        }
+        .proto-http  { background: rgba(59,130,246,0.15); color: #93c5fd; }
+        .proto-https { background: rgba(16,185,129,0.15); color: var(--primary); }
+        .proto-socks5{ background: rgba(168,85,247,0.15); color: #c4b5fd; }
+        .proto-socks4{ background: rgba(245,158,11,0.15); color: var(--warning); }
+
+        .vpn-connect-btn {
+            font-size: 11px; font-weight: 700;
+            padding: 6px 12px;
+            border: none; border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: rgba(16,185,129,0.15);
+            color: var(--primary);
+            white-space: nowrap;
+            width: auto;
+            flex-shrink: 0;
+        }
+        .vpn-connect-btn:hover { background: var(--primary); color: white; }
+        .vpn-connect-btn.active { background: var(--primary); color: white; }
+        .vpn-connect-btn.connecting-state { background: rgba(245,158,11,0.2); color: var(--warning); cursor: wait; }
+        .vpn-connect-btn.failed-state { background: rgba(239,68,68,0.15); color: var(--danger); }
+
+        #vpnProxyListArea { max-height: 280px; overflow-y: auto; }
+        #vpnProxyListArea::-webkit-scrollbar { width: 4px; }
+        #vpnProxyListArea::-webkit-scrollbar-thumb { background: rgba(16,185,129,0.3); border-radius: 2px; }
+
+        /* ══════════════════════════════
+           CONTAS TAB
+        ══════════════════════════════ */
+        .contas-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .contas-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .contas-title i { color: var(--primary); }
+
+        .contas-actions { display: flex; gap: 6px; }
+
+        .contas-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-sec);
+        }
+
+        .contas-empty i { font-size: 40px; color: rgba(16,185,129,0.3); margin-bottom: 12px; display: block; }
+        .contas-empty p { font-size: 13px; line-height: 1.6; }
+        .contas-empty span { color: var(--primary); font-weight: 600; }
+
+        .account-list { display: flex; flex-direction: column; gap: 10px; }
+
+        .account-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.25s;
+        }
+
+        .account-card:hover { border-color: rgba(16,185,129,0.35); }
+        .account-card.active-account { border-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.04); }
+
+        .account-card-header {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 12px 14px;
+            cursor: pointer;
+        }
+
+        .account-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid rgba(16,185,129,0.4);
+            object-fit: cover;
+            flex-shrink: 0;
+            background: rgba(16,185,129,0.1);
+        }
+
+        .account-avatar-placeholder {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid rgba(16,185,129,0.4);
+            background: rgba(16,185,129,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .account-info { flex: 1; min-width: 0; }
+        .account-name { font-size: 13px; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .account-meta { font-size: 11px; color: var(--text-sec); margin-top: 2px; display: flex; gap: 8px; align-items: center; }
+
+        .account-badge {
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-auth { background: rgba(16,185,129,0.15); color: var(--primary); border: 1px solid rgba(16,185,129,0.3); }
+        .badge-pass { background: rgba(245,158,11,0.15); color: var(--warning); border: 1px solid rgba(245,158,11,0.3); }
+
+        .account-chevron { color: var(--text-sec); font-size: 12px; transition: transform 0.25s; flex-shrink: 0; }
+        .account-card.expanded .account-chevron { transform: rotate(180deg); }
+
+        .account-details {
+            display: none;
+            padding: 0 14px 14px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .account-card.expanded .account-details { display: block; }
+
+        .detail-grid { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 9px;
+            padding: 9px 12px;
+        }
+
+        .detail-icon { color: var(--primary); font-size: 13px; width: 16px; text-align: center; flex-shrink: 0; }
+        .detail-label { font-size: 10px; text-transform: uppercase; font-weight: 700; color: var(--text-sec); letter-spacing: 0.4px; min-width: 60px; flex-shrink: 0; }
+        .detail-value { font-size: 12px; color: var(--text-main); flex: 1; font-family: monospace; word-break: break-all; }
+        .detail-value.empty { color: rgba(148,163,184,0.4); font-family: inherit; font-style: italic; }
+
+        .detail-copy-btn { background: none; border: none; color: rgba(148,163,184,0.5); cursor: pointer; padding: 3px 5px; border-radius: 4px; width: auto; font-size: 11px; transition: color 0.2s; }
+        .detail-copy-btn:hover { color: var(--primary); }
+
+        .totp-inline {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 3px;
+            font-family: 'Monaco', 'Consolas', monospace;
+        }
+
+        .totp-timer { font-size: 10px; color: var(--text-sec); margin-left: 6px; }
+
+        .account-actions { display: flex; gap: 7px; margin-top: 12px; }
+        .account-actions button { flex: 1; padding: 9px; font-size: 12px; }
+
+        /* ── Edit modal ── */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none; align-items: center; justify-content: center;
+            z-index: 1000; backdrop-filter: blur(3px);
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-content {
+            background: var(--card-bg);
+            width: 90%; max-height: 88vh; overflow-y: auto;
+            padding: 22px; border-radius: 18px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+            border: 1px solid var(--border);
+            animation: slideUp 0.25s ease-out;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .modal-title { font-weight: 800; font-size: 15px; color: var(--text-main); }
+        .modal-close { background: none; border: none; color: var(--text-sec); cursor: pointer; font-size: 18px; width: auto; padding: 4px 8px; border-radius: 6px; }
+        .modal-close:hover { color: var(--text-main); background: rgba(255,255,255,0.08); }
+        .modal-text  { font-size: 12px; color: var(--text-sec); margin-bottom: 14px; }
+        .modal-buttons { display: flex; gap: 9px; margin-top: 16px; }
+
+        /* ── Status toast ── */
+        #status-msg {
+            position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+            padding: 9px 18px; border-radius: 22px; font-size: 12px; color: white;
+            z-index: 200; display: none; box-shadow: 0 4px 14px rgba(0,0,0,0.3); font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .msg-success { background: var(--primary); }
+        .msg-error   { background: var(--danger);  }
+
+        /* ── Auth Key Alerts (banners no topo da aba Contas) ── */
+        .auth-alert-banner {
+            display: flex; align-items: flex-start; gap: 10px;
+            background: #1e293b; border: 1px solid var(--warning);
+            border-left: 4px solid var(--warning); border-radius: 10px;
+            padding: 11px 13px; margin-bottom: 10px; animation: fadeIn .3s ease;
+        }
+        .auth-alert-banner.danger { border-color: var(--danger); border-left-color: var(--danger); }
+        .auth-alert-banner i { color: var(--warning); font-size: 16px; margin-top: 2px; }
+        .auth-alert-banner.danger i { color: var(--danger); }
+        .auth-alert-body { flex: 1; }
+        .auth-alert-body strong { display: block; font-size: 12px; font-weight: 700; color: var(--text-main); margin-bottom: 3px; }
+        .auth-alert-body span { font-size: 11px; color: var(--text-sec); }
+        .auth-alert-actions { display: flex; gap: 6px; margin-top: 7px; flex-wrap: wrap; }
+        .auth-alert-actions button { font-size: 11px; padding: 5px 10px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; }
+        .auth-alert-accept { background: var(--primary); color: white; }
+        .auth-alert-dismiss { background: var(--border); color: var(--text-sec); }
+        #contasAlertArea { padding: 0 2px; }
+
+        /* ── Email Temporário por Conta ── */
+        .account-temp-email {
+            margin-top: 10px;
+            border-top: 1px solid var(--border);
+            padding-top: 10px;
+        }
+        .temp-email-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        .temp-email-label {
+            font-size: 10px; font-weight: 700; letter-spacing: .5px;
+            color: var(--primary); text-transform: uppercase;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .temp-email-row {
+            display: flex; align-items: center; gap: 6px;
+            background: #0f172a; border-radius: 7px; padding: 7px 9px;
+            border: 1px solid var(--border);
+        }
+        .temp-email-row > span {
+            flex: 1; color: var(--text-main); font-family: monospace; font-size: 11px;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            min-width: 0;
+        }
+        .temp-email-actions {
+            display: flex; gap: 4px; flex-shrink: 0;
+        }
+        .btn-temp-sm {
+            background: var(--border); border: none; color: var(--text-sec);
+            border-radius: 6px; width: 26px; height: 26px; font-size: 10px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: background .15s, color .15s;
+        }
+        .btn-temp-sm:hover { background: var(--primary); color: white; }
+        .btn-gen-temp {
+            width: 100%; background: transparent; border: 1px dashed var(--border);
+            color: var(--primary); border-radius: 7px; padding: 8px; font-size: 11px;
+            cursor: pointer; font-weight: 600; transition: all .2s;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .btn-gen-temp:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        .temp-inbox-notif {
+            border-radius: 7px; padding: 7px 10px; font-size: 11px; margin-top: 6px;
+            display: flex; align-items: center; gap: 7px; cursor: pointer;
+        }
+        .temp-inbox-notif span { flex: 1; }
+        .temp-inbox-notif.verify { background: rgba(16,185,129,.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,.25); }
+        .temp-inbox-notif.code   { background: rgba(245,158,11,.12);  color: #fcd34d; border: 1px solid rgba(245,158,11,.25); }
+        .temp-inbox-notif.empty  { background: #0f172a; color: var(--text-sec); }
+        .temp-inbox-status {
+            font-size: 10px; color: var(--text-sec);
+            display: flex; align-items: center; gap: 4px;
+        }
+        .temp-inbox-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
+        .temp-inbox-dot.active { background: #10b981; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <img src="icon.png" class="header-logo" alt="Brazino">
+            <h2>BRAZINO</h2>
+        </div>
+        <span class="header-badge">v5.0</span>
+    </div>
+
+    <div class="nav-menu">
+        <div class="nav-btn active" data-tab="login"><i class="fas fa-sign-in-alt"></i> Login</div>
+        <div class="nav-btn" data-tab="access"><i class="fas fa-key"></i> Access</div>
+        <div class="nav-btn" data-tab="friends"><i class="fas fa-user-minus"></i> Friends</div>
+        <div class="nav-btn" data-tab="search"><i class="fas fa-search"></i> Search</div>
+        <div class="nav-btn" data-tab="auth"><i class="fas fa-shield-alt"></i> Auth</div>
+        <div class="nav-btn" data-tab="robux"><i class="fas fa-coins"></i> Robux</div>
+        <div class="nav-btn" data-tab="vpn"><i class="fas fa-globe"></i> VPN</div>
+        <div class="nav-btn" data-tab="contas"><i class="fas fa-users"></i> Contas</div>
+    </div>
+
+    <div class="container">
+        <div class="content-wrapper">
+
+            <!-- ═══ LOGIN ═══ -->
+            <div id="loginTab" class="tab-content active">
+                <div id="loginCard" class="card">
+                    <div class="card-header">
+                        <div class="card-header-icon"><i class="fas fa-cookie-bite"></i></div>
+                        <h3 class="card-header-title">Cookie Login</h3>
+                    </div>
+                    <p class="card-subtitle">Insira o cookie .ROBLOSECURITY para entrar na conta instantaneamente.</p>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label>Cookie do Roblox</label>
+                            <input type="text" id="cookie" placeholder="_|WARNING:-DO-NOT-SHARE-THIS..." required>
+                        </div>
+                        <button type="submit" class="btn-primary"><i class="fas fa-bolt"></i> Iniciar Sessão</button>
+                    </form>
+                    <div id="login-alert"></div>
+                </div>
+
+                <div id="profileView" class="card" style="display:none;">
+                    <div class="profile-layout">
+                        <div class="profile-header">
+                            <img id="userAvatar" src="" alt="Avatar" class="profile-avatar">
+                            <div class="profile-info">
+                                <h3 id="userName">Carregando...</h3>
+                                <p>ID: <span id="userId">0</span></p>
+                            </div>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-card"><span id="userRobux" class="stat-value">0</span><span class="stat-label">Robux</span></div>
+                            <div class="stat-card"><span id="userCreated" class="stat-value">-</span><span class="stat-label">Criada em</span></div>
+                            <div class="stat-card"><span id="daysSince" class="stat-value">0</span><span class="stat-label">Dias de conta</span></div>
+                            <div class="stat-card"><span class="stat-value">Ativa</span><span class="stat-label">Status</span></div>
+                        </div>
+                        <button id="backBtn" class="btn-secondary"><i class="fas fa-arrow-left"></i> Voltar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ ACCESS ═══ -->
+            <div id="accessTab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-icon"><i class="fas fa-fingerprint"></i></div>
+                        <h3 class="card-header-title">Cookie Access</h3>
+                    </div>
+                    <p class="card-subtitle">Visualize e copie o cookie da conta logada no navegador.</p>
+                    <div class="form-group">
+                        <label>Seu Cookie Atual</label>
+                        <input type="password" id="accessCookie" readonly placeholder="Clique em Mostrar para carregar">
+                    </div>
+                    <button id="getCookieBtn" class="btn-primary"><i class="fas fa-eye"></i> Mostrar Cookie</button>
+                    <div id="access-alert"></div>
+                </div>
+            </div>
+
+            <!-- ═══ FRIENDS ═══ -->
+            <div id="friendsTab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-icon"><i class="fas fa-users-slash"></i></div>
+                        <h3 class="card-header-title">Remover Friends</h3>
+                    </div>
+                    <p class="card-subtitle">Remova todos os amigos da conta de forma automática.</p>
+                    <form id="friendsForm">
+                        <div class="form-group">
+                            <label>Cookie da Conta</label>
+                            <input type="text" id="friendsCookie" placeholder="Insira o cookie da conta alvo" required>
+                        </div>
+                        <button type="submit" class="btn-danger"><i class="fas fa-trash-alt"></i> Limpar Lista de Amigos</button>
+                    </form>
+                    <div id="friends-alert"></div>
+                </div>
+            </div>
+
+            <!-- ═══ SEARCH ═══ -->
+            <div id="searchTab" class="tab-content">
+                <div class="card">
+                    <div id="searchFormContainer">
+                        <div class="card-header">
+                            <div class="card-header-icon"><i class="fas fa-search"></i></div>
+                            <h3 class="card-header-title">User Search</h3>
+                        </div>
+                        <p class="card-subtitle">Busque informações detalhadas de qualquer usuário pelo nome.</p>
+                        <form id="searchForm">
+                            <div class="form-group">
+                                <label>Nome de Usuário</label>
+                                <input type="text" id="searchUsernameInput" placeholder="Ex: Roblox" required>
+                            </div>
+                            <button type="submit" class="btn-primary"><i class="fas fa-search"></i> Buscar Usuário</button>
+                        </form>
+                    </div>
+
+                    <div id="searchResult" style="display:none;">
+                        <div class="profile-layout">
+                            <div class="profile-header">
+                                <img id="searchAvatar" src="" alt="Avatar" class="profile-avatar">
+                                <div class="profile-info">
+                                    <h3 id="searchDisplayName">Nome</h3>
+                                    <p id="searchUsername">@username</p>
+                                </div>
+                            </div>
+                            <div class="stats-grid">
+                                <div class="stat-card"><span id="resId" class="stat-value">0</span><span class="stat-label">User ID</span></div>
+                                <div class="stat-card"><span id="resCreated" class="stat-value">-</span><span class="stat-label">Criada em</span></div>
+                                <div class="stat-card"><span id="resFollowers" class="stat-value">0</span><span class="stat-label">Seguidores</span></div>
+                                <div class="stat-card"><span id="resFriends" class="stat-value">0</span><span class="stat-label">Amigos</span></div>
+                            </div>
+                            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:10px;border:1px solid var(--border);">
+                                <div style="font-size:10px;color:var(--text-sec);text-transform:uppercase;font-weight:700;margin-bottom:5px;">Descrição</div>
+                                <div id="resDescription" style="font-size:12px;color:var(--text-main);line-height:1.5;"></div>
+                            </div>
+                            <div class="btn-row">
+                                <button id="searchBackBtn" class="btn-secondary"><i class="fas fa-arrow-left"></i> Voltar</button>
+                                <button id="downloadPdfBtn" class="btn-success"><i class="fas fa-file-pdf"></i> PDF</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="search-alert"></div>
+                </div>
+            </div>
+
+            <!-- ═══ AUTH ═══ -->
+            <div id="authTab" class="tab-content">
+                <div id="code-container" style="display:none;" class="card code-section">
+                    <div class="section-title"><i class="fas fa-shield-check"></i> Autenticador 2FA</div>
+                    <div class="code-display" id="current-code">------</div>
+                    <div class="timer-container"><div id="timer-bar"></div></div>
+                    <div id="timer-text">Expira em --s</div>
+                    <div style="margin-top:10px;text-align:left;">
+                        <label style="text-align:center;">Chave Secreta:</label>
+                        <div id="display-secret" class="secret-display-box" title="Clique para copiar"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title"><i class="fas fa-cog"></i> Configurações Auth</div>
+                    <div class="form-group">
+                        <label>Chave Secreta (2FA)</label>
+                        <input type="text" id="auth-secret" placeholder="Cole sua chave TOTP aqui">
+                    </div>
+                    <div class="form-group">
+                        <label>E-mail do Roblox</label>
+                        <input type="email" id="auth-email" placeholder="Seu@email.com">
+                    </div>
+                    <div style="display:flex;gap:8px;">
+                        <div class="form-group" style="flex:1;">
+                            <label>Senha Atual</label>
+                            <input type="password" id="auth-current-pass" placeholder="Senha atual">
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Nova Senha</label>
+                            <input type="password" id="auth-new-pass" placeholder="Nova senha">
+                        </div>
+                    </div>
+                    <button id="auth-save" class="btn-primary"><i class="fas fa-save"></i> Salvar e Ativar</button>
+                </div>
+
+                <div class="card">
+                    <div class="section-title"><i class="fas fa-envelope"></i> E-mail Temporário</div>
+                    <div id="temp-email-addr" class="email-addr">Nenhum gerado no momento</div>
+                    <button id="gen-temp-email" class="btn-primary"><i class="fas fa-magic"></i> Gerar Email Temp</button>
+                    <div id="inbox-status">
+                        <span class="status-dot"></span>
+                        <span id="inbox-text">Aguardando mensagens...</span>
+                    </div>
+                    <div id="email-notification" class="email-notification">
+                        <div class="notification-label"><i class="fas fa-check-circle"></i> <span id="notif-type">Mensagem Recebida</span></div>
+                        <div id="notif-content" class="notification-content">Aguardando...</div>
+                    </div>
+                </div>
+
+                <div id="auth-alert"></div>
+            </div>
+
+            <!-- ═══ ROBUX ═══ -->
+            <div id="robuxTab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-icon"><i class="fas fa-coins"></i></div>
+                        <h3 class="card-header-title">Automação Robux</h3>
+                    </div>
+                    <p class="card-subtitle">Altere automaticamente o preço de uma Game Pass usando seu cookie.</p>
+                    <div class="form-group">
+                        <label>Cookie (.ROBLOSECURITY)</label>
+                        <textarea id="robux-cookie" placeholder="Cole seu cookie aqui"></textarea>
+                    </div>
+                    <div style="display:flex;gap:8px;">
+                        <div class="form-group" style="flex:1;"><label>Valor Robux</label><input type="number" id="robux-value" placeholder="Preço"></div>
+                        <div class="form-group" style="flex:1;"><label>ID do Jogo</label><input type="text" id="robux-game-id" placeholder="ID"></div>
+                    </div>
+                    <div class="form-group"><label>ID da Game Pass</label><input type="text" id="robux-pass-id" placeholder="ID da Pass"></div>
+                    <button id="btn-update-robux" class="btn-primary"><i class="fas fa-rocket"></i> Executar Automação</button>
+                    <div id="robux-alert"></div>
+                </div>
+            </div>
+
+            <!-- ═══ VPN ═══ -->
+            <div id="vpnTab" class="tab-content">
+
+                <div class="ip-display">
+                    <span class="ip-label">Seu IP atual</span>
+                    <span class="ip-value" id="currentIp">Verificando...</span>
+                    <button class="refresh-btn" id="refreshIpBtn" title="Atualizar IP">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="vpn-toggle-row">
+                    <div class="toggle-label">Proxy / VPN</div>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <div class="vpn-status-badge" id="vpnStatusBadge">
+                            <span class="status-dot" id="vpnStatusDot"></span>
+                            <span id="vpnStatusText">Desativado</span>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="proxyToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="vpn-tabs">
+                    <button class="vpn-tab active" data-vpntab="live">Proxies Online</button>
+                    <button class="vpn-tab" data-vpntab="custom">Personalizado</button>
+                </div>
+
+                <!-- ── Aba: Proxies Online ── -->
+                <div class="vpn-tab-content active" id="vpntab-live">
+
+                    <div style="display:flex;gap:6px;margin-bottom:10px;">
+                        <select id="vpnProtocolFilter" style="flex:1;">
+                            <option value="http,https,socks5,socks4">Todos</option>
+                            <option value="http">HTTP</option>
+                            <option value="https">HTTPS</option>
+                            <option value="socks5">SOCKS5</option>
+                            <option value="socks4">SOCKS4</option>
+                        </select>
+                        <button id="fetchProxiesBtn" class="btn-primary" style="flex:2;">
+                            <i class="fas fa-sync-alt"></i> Buscar Proxies
+                        </button>
+                    </div>
+
+                    <div id="vpnProxyListArea">
+                        <div class="vpn-empty-state">
+                            <i class="fas fa-globe" style="font-size:32px;color:rgba(16,185,129,0.3);display:block;margin-bottom:8px;"></i>
+                            <span>Clique em <strong>Buscar Proxies</strong> para carregar uma lista atualizada em tempo real.</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ── Aba: Personalizado ── -->
+                <div class="vpn-tab-content" id="vpntab-custom">
+                    <div class="form-group"><label>Tipo de Proxy</label>
+                        <select id="proxyType">
+                            <option value="http">HTTP</option>
+                            <option value="https">HTTPS</option>
+                            <option value="socks5">SOCKS5</option>
+                            <option value="socks4">SOCKS4</option>
+                        </select>
+                    </div>
+                    <div class="vpn-form-row">
+                        <div class="form-group" style="flex:3;"><label>Endereço / Host</label><input type="text" id="proxyHost" placeholder="ex: 192.168.1.1"></div>
+                        <div class="form-group" style="flex:1;"><label>Porta</label><input type="number" id="proxyPort" placeholder="1080"></div>
+                    </div>
+                    <button class="btn-primary" id="saveCustomBtn"><i class="fas fa-save"></i> Conectar</button>
+                    <div id="vpn-custom-alert" style="margin-top:8px;"></div>
+                </div>
+
+            </div>
+
+            <!-- ═══ CONTAS ═══ -->
+            <div id="contasTab" class="tab-content">
+                <div class="contas-header">
+                    <div class="contas-title"><i class="fas fa-users"></i> Contas Salvas</div>
+                    <div class="contas-actions">
+                        <button class="btn-ghost" id="clearAlertsBtn" title="Limpar alertas" style="display:none;"><i class="fas fa-bell-slash"></i></button>
+                        <button class="btn-ghost" id="downloadAllBtn" title="Baixar todas as contas"><i class="fas fa-download"></i> Exportar</button>
+                    </div>
+                </div>
+
+                <div id="contasAlertArea"></div>
+
+                <div id="contasEmpty" class="contas-empty">
+                    <i class="fas fa-user-shield"></i>
+                    <p>Nenhuma conta salva ainda.<br>
+                    Entre com <span>Cookie Login</span> para criar automaticamente.</p>
+                </div>
+
+                <div id="accountList" class="account-list" style="display:none;"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ── Modal de Edição de Conta ── -->
+    <div id="editModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-edit" style="color:var(--primary);margin-right:7px;"></i>Editar Conta</div>
+                <button class="modal-close" id="editModalClose"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" id="edit-password" placeholder="Senha da conta">
+            </div>
+            <div class="form-group">
+                <label>Chave Auth (2FA)</label>
+                <input type="text" id="edit-authKey" placeholder="Chave secreta TOTP">
+            </div>
+            <div class="form-group">
+                <label>E-mail</label>
+                <input type="email" id="edit-email" placeholder="email@exemplo.com">
+            </div>
+            <div class="modal-buttons">
+                <button id="editModalCancel" class="btn-secondary">Cancelar</button>
+                <button id="editModalSave" class="btn-primary"><i class="fas fa-save"></i> Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Modal Confirmar Exclusão ── -->
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-title" style="margin-bottom:10px;"><i class="fas fa-trash" style="color:var(--danger);margin-right:7px;"></i>Excluir Conta?</div>
+            <p class="modal-text">Esta ação não pode ser desfeita. Todos os dados salvos serão removidos.</p>
+            <div class="modal-buttons">
+                <button id="deleteModalCancel" class="btn-secondary">Cancelar</button>
+                <button id="deleteModalConfirm" class="btn-danger">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="status-msg"></div>
+
+    <script src="config.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>
