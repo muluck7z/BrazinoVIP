@@ -1,4 +1,4 @@
-import { createHmac } from 'crypto';
+const { createHmac } = require('crypto');
 
 function base32ToBuffer(base32) {
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
@@ -34,7 +34,7 @@ function generateTOTP(secretBase32) {
   return code.toString().padStart(6, '0');
 }
 
-export default function handler(req, res) {
+module.exports = function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -48,4 +48,4 @@ export default function handler(req, res) {
   } catch {
     return res.status(500).json({ error: 'Failed to generate TOTP' });
   }
-}
+};
