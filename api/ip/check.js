@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -19,8 +19,8 @@ export default async function handler(req, res) {
       clearTimeout(tid);
       const val  = api.json ? await r.json() : await r.text();
       const ip   = api.json ? val[api.key] : val.trim();
-      if (ip && /^\d{1,3}(\.\d{1,3}){3}$/.test(ip)) return res.json({ ip });
-    } catch { /* tenta próxima */ }
+      if (ip && /^d{1,3}(.d{1,3}){3}$/.test(ip)) return res.json({ ip });
+    } catch {}
   }
   return res.status(502).json({ error: 'All IP APIs failed' });
-}
+};
