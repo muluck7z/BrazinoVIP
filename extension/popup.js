@@ -726,27 +726,26 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.getElementById('searchUsernameInput').value='';
     });
     document.getElementById('downloadPdfBtn').addEventListener('click',()=>{
-        const{jsPDF}=window.jspdf; const doc=new jsPDF();
-        const dn=document.getElementById('searchDisplayName').textContent;
-        const un=document.getElementById('searchUsername').textContent;
-        const id=document.getElementById('resId').textContent;
-        const cr=document.getElementById('resCreated').textContent;
-        const fr=document.getElementById('resFriends').textContent;
-        const fw=document.getElementById('resFollowers').textContent;
-        const ds=document.getElementById('resDescription').textContent;
-        doc.setFillColor(16,185,129);doc.rect(0,0,210,38,'F');
-        doc.setTextColor(255,255,255);doc.setFontSize(22);doc.setFont('helvetica','bold');doc.text('BRAZINO',105,18,{align:'center'});
-        doc.setFontSize(11);doc.setFont('helvetica','normal');doc.text('Relatório de Dados do Usuário',105,28,{align:'center'});
-        doc.setTextColor(30,41,59);doc.setFontSize(17);doc.setFont('helvetica','bold');doc.text(dn,20,55);
-        doc.setFontSize(12);doc.setTextColor(100,116,139);doc.setFont('helvetica','normal');doc.text(un,20,64);
-        doc.setDrawColor(226,232,240);doc.line(20,72,190,72);
-        const dd=(l,v,x,y)=>{doc.setFontSize(9);doc.setTextColor(16,185,129);doc.setFont('helvetica','bold');doc.text(l.toUpperCase(),x,y);doc.setFontSize(11);doc.setTextColor(30,41,59);doc.setFont('helvetica','normal');doc.text(String(v),x,y+7);};
-        dd('ID',id,20,82);dd('Criação',cr,110,82);dd('Amigos',fr,20,107);dd('Seguidores',fw,110,107);
-        doc.setFontSize(9);doc.setTextColor(16,185,129);doc.setFont('helvetica','bold');doc.text('DESCRIÇÃO',20,130);
-        doc.setFontSize(10);doc.setTextColor(30,41,59);doc.setFont('helvetica','normal');doc.text(doc.splitTextToSize(ds,170),20,138);
-        const ph=doc.internal.pageSize.height;doc.setFontSize(9);doc.setTextColor(148,163,184);
-        doc.text(`Gerado em ${new Date().toLocaleString('pt-BR')} por Brazino v5.0`,105,ph-16,{align:'center'});
-        doc.save(`Brazino_${un.replace('@','')}.pdf`);
+        const dn = document.getElementById('searchDisplayName').textContent;
+        const un = document.getElementById('searchUsername').textContent;
+        const id = document.getElementById('resId').textContent;
+        const cr = document.getElementById('resCreated').textContent;
+        const fr = document.getElementById('resFriends').textContent;
+        const fw = document.getElementById('resFollowers').textContent;
+        const ds = document.getElementById('resDescription').textContent;
+        const data = {
+            displayName: dn, username: un, id,
+            created: cr, friends: fr, followers: fw,
+            description: ds,
+            generated: new Date().toLocaleString('pt-BR'),
+            source: 'Brazino v5.0'
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href = url; a.download = `Brazino_${un.replace('@','')}.json`;
+        a.click(); URL.revokeObjectURL(url);
+        showStatus('Dados exportados!', 'success');
     });
 
     // ══════════════════════════
