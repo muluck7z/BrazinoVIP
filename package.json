@@ -2,6 +2,5 @@
   "name": "brazino-api",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
-  "description": "BrazinoVIP backend API - hosted on Vercel"
+  "description": "BrazinoVIP backend API"
 }
