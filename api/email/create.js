@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     const domainsData = await domainsRes.json();
     const domain = domainsData['hydra:member'][0].domain;
     const user = Math.random().toString(36).substring(2, 12);
-    const address = `${user}@${domain}`;
+    const address = user + '@' + domain;
     const password = Math.random().toString(36).substring(2, 15);
     await fetch('https://api.mail.tm/accounts', {
       method: 'POST',
@@ -26,4 +26,4 @@ export default async function handler(req, res) {
   } catch (e) {
     return res.status(500).json({ error: 'Failed to create email', detail: e.message });
   }
-}
+};
