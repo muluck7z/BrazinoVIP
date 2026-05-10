@@ -918,26 +918,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             }catch{}
         },4000);
     }
-                    // Abre aba de verificação
-                    chrome.tabs.create({url:link});
-                }else if(rm){
-                    const link=rm[0].replace(/&amp;/g,'&');
-                    lastMsgId=messages[0].id;
-                    updateEmailCard('revert','Clique para reverter alterações',link);
-                    await chrome.storage.local.set({lastNotif:{type:'revert',content:'Clique para reverter',link},tempLastMsgId:lastMsgId});
-                    showStatus('Link de reversão recebido!','success');
-                }else if(cm){
-                    const code=cm[0];
-                    lastMsgId=messages[0].id;
-                    updateEmailCard('code',`Código recebido: ${code}`,null);
-                    await chrome.storage.local.set({lastNotif:{type:'code',content:`Código: ${code}`,link:null},lastTempCode:code,lastTempCodeTime:Date.now(),tempLastMsgId:lastMsgId});
-                    chrome.tabs.query({url:'*://*.roblox.com/*'},(tabs)=>tabs.forEach(t=>chrome.tabs.sendMessage(t.id,{action:'codeCaptured',code}).catch(()=>{})));
-                    it.textContent=`Código: ${code}`;
-                    showStatus('Código capturado!','success');
-                }
-            }catch{}
-        },4000);
-    }
     function updateEmailCard(type,content,link){
         const icons={verify:'fas fa-check-circle',revert:'fas fa-undo',code:'fas fa-key'};
         const labels={verify:'Verificação de E-mail',revert:'Reversão de Conta',code:'Código Capturado'};
@@ -1110,58 +1090,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             btn.innerHTML = '<i class="fas fa-sync-alt"></i> Buscar Proxies';
             listArea.innerHTML = `<div class="vpn-empty-state">Erro ao buscar proxies. Tente novamente.</div>`;
         }
-    }
-            } catch { /* falhou */ }
-        }
-
-        if (!proxies.length) {
-            try {
-                for (const proto of protos) {
-                    const p = await tryProxyListTxt(proto).catch(() => []);
-                    proxies.push(...p);
-                }
-            } catch { /* falhou */ }
-        }
-
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-sync-alt"></i> Buscar Proxies';
-
-        if (!proxies.length) {
-            listArea.innerHTML = `<div class="vpn-empty-state">
-                <i class="fas fa-exclamation-triangle" style="font-size:28px;color:rgba(239,68,68,0.5);display:block;margin-bottom:8px;"></i>
-                <span>Não foi possível carregar proxies. Verifique sua conexão ou use a aba <strong>Personalizado</strong>.</span>
-            </div>`;
-            return;
-        }
-
-        // Limita a 15 proxies e renderiza
-        proxies = proxies.slice(0, 15);
-        listArea.innerHTML = '';
-
-        proxies.forEach(p => {
-            const proto = (p.protocols[0] || 'http').toLowerCase();
-            const flag  = countryFlag(p.country);
-            const name  = p.country ? countryName(p.country) : 'Desconhecido';
-
-            const item  = document.createElement('div');
-            item.className = 'vpn-proxy-item';
-            item.innerHTML = `
-                <div class="vpn-proxy-info">
-                    <span class="vpn-proxy-flag">${flag}</span>
-                    <div class="vpn-proxy-details">
-                        <div class="vpn-proxy-name">${escapeHtml(name)}</div>
-                        <div class="vpn-proxy-addr">${escapeHtml(p.ip)}:${escapeHtml(String(p.port))}</div>
-                    </div>
-                    <span class="vpn-proto-badge proto-${proto}">${proto}</span>
-                </div>
-                <button class="vpn-connect-btn">Usar</button>`;
-
-            item.querySelector('.vpn-connect-btn').addEventListener('click', () => {
-                applyProxy({ host: p.ip, port: String(p.port), type: proto }, item);
-            });
-
-            listArea.appendChild(item);
-        });
     }
 
     async function initVPN() {
